@@ -1,0 +1,49 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+*.db
+
+# --- Environment ---
+.env
+.venv/
+venv/
+env/
+*.swp
+
+# --- OS / IDE ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# --- Migrations ---
+alembic/versions/*.pyc
+alembic/versions/*.py~
+
+# --- Caches ---
+.cache/
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+.ipynb_checkpoints/
+coverage/
+htmlcov/
+
+# --- Uploads (user content, not code) ---
+app/upload/users/*
+app/upload/stays/*
+!app/upload/.gitkeep   # keep folder but ignore files
+
+# --- Build / Dist ---
+dist/
+build/
+*.tar.gz
+*.egg-info/
