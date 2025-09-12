@@ -1,0 +1,18 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+alembic
+asyncpg        # async PostgreSQL driver
+python-dotenv  # load .env configs
+pydantic
+mypy
+passlib
+types-passlib
+jose
+python-jose
+pydantic-settings
+python-multipart
+greenlet
+bcrypt==4.1.2
+passlib[bcrypt]==1.7.4
+PyJWT
