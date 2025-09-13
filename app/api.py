@@ -7,11 +7,20 @@ from app.features.stays.routes import (
     provider_stays_router,
     admin_stays_router,
 )
+from app.features.cars.routes import (
+    router as cars_router,
+    provider_car_router,
+    admin_car_router,
+)
+
 
 api_router = APIRouter()
 api_router.include_router(users_router)
-api_router.include_router(providers_router)
 api_router.include_router(admin_router)
-api_router.include_router(stays_router)
-api_router.include_router(provider_stays_router)
+api_router.include_router(providers_router)
 api_router.include_router(admin_stays_router)
+api_router.include_router(admin_car_router)
+api_router.include_router(provider_stays_router)
+api_router.include_router(provider_car_router)
+api_router.include_router(stays_router)
+api_router.include_router(cars_router)

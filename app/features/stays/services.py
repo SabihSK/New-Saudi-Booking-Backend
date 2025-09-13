@@ -99,7 +99,7 @@ async def create_stay(
         review_count=stay.review_count,
         created_at=stay.created_at,
         amenities=[AmenityRead.from_orm(a) for a in stay.amenities],
-        images=[img.image_path for img in stay.images],
+        images=[StayImageRead.from_orm(img) for img in stay.images],
         price_breakdown=breakdown,
     )
 
