@@ -35,6 +35,7 @@ async def search_stays(
     children: Optional[int] = None,
     rooms: Optional[int] = None,
     amenities: Optional[List[int]] = Query(None),
+    property_type_id: Optional[int] = None,
     sort_by: str = "price_asc",
     page: int = 1,
     page_size: int = 20,
@@ -53,12 +54,18 @@ async def search_stays(
         children=children,
         rooms=rooms,
         amenities=amenities,
+        property_type_id=property_type_id,
         sort_by=sort_by,
         page=page,
         page_size=page_size,
         check_in=check_in,
         check_out=check_out,
     )
+
+
+@router.get("/featured", response_model=List[StayRead])
+async def featured_stays(session: AsyncSession = Depends(get_session)):
+    return await services.get_featured_stays(session)
 
 
 @router.get("/{stay_id}", response_model=StayRead)

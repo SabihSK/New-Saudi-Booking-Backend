@@ -41,6 +41,8 @@ class Car(SQLModel, table=True):
 
     # Rental details
     price_per_day: float
+    service_fee: float = Field(default=0)
+    tax_percent: float = Field(default=0)
     seats: int
     transmission: str
     fuel_type: str

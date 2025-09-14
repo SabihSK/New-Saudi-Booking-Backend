@@ -294,3 +294,19 @@ async def delete_car_feature(
 
     await session.delete(feature)
     await session.commit()
+
+
+# ------------------ Featured Cars ------------------
+async def get_featured_cars(session: AsyncSession) -> List[Car]:
+    result = await session.exec(
+        select(Car)
+        .options(
+            selectinload(Car.images),
+            selectinload(Car.features),
+            selectinload(Car.reviews),
+        )
+        .where(Car.is_featured.is_(True))
+        .order_by(Car.created_at.desc())
+    )
+
+    return result.all()

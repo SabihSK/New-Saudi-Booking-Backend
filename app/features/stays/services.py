@@ -345,6 +345,7 @@ async def search_stays(
     sort_by: str = "price_asc",
     page: int = 1,
     page_size: int = 20,
+    property_type_id: Optional[int] = None,
     check_in: Optional[date] = None,
     check_out: Optional[date] = None,
 ) -> List[StayRead]:
@@ -370,6 +371,8 @@ async def search_stays(
         stmt = stmt.where(Stay.max_adults >= adults)
     if children is not None:
         stmt = stmt.where(Stay.max_children >= children)
+    if property_type_id:
+        stmt = stmt.where(Stay.property_type_id == property_type_id)
 
     result = await session.exec(stmt)
     stays = result.all()
@@ -478,30 +481,19 @@ async def get_stays_by_provider(
     result = await session.exec(stmt)
     stays = result.all()
 
-    return [
-        StayRead(
-            id=s.id,
-            provider_id=s.provider_id,
-            property_type_id=s.property_type_id,
-            name=s.name,
-            description=s.description,
-            address_line=s.address_line,
-            street=s.street,
-            city=s.city,
-            country=s.country,
-            price_per_night=s.price_per_night,
-            service_fee=s.service_fee,
-            tax_percent=s.tax_percent,
-            rooms=s.rooms,
-            max_adults=s.max_adults,
-            max_children=s.max_children,
-            is_featured=s.is_featured,
-            rating_avg=s.rating_avg or 0,
-            review_count=s.review_count,
-            created_at=s.created_at,
-            amenities=[AmenityRead.from_orm(a) for a in s.amenities],
-            images=[img.image_path for img in s.images],
-            price_breakdown=None,  # you can add breakdown later
+    return stays
+
+
+# ------------------ Featured Stays ------------------
+async def get_featured_stays(session: AsyncSession) -> List[Stay]:
+    result = await session.exec(
+        select(Stay)
+        .options(
+            selectinload(Stay.images),
+            selectinload(Stay.amenities),
+            selectinload(Stay.reviews),
         )
-        for s in stays
-    ]
+        .where(Stay.is_featured.is_(True))
+        .order_by(Stay.created_at.desc())
+    )
+    return result.all()

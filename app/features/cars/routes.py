@@ -49,6 +49,12 @@ async def search_cars(
     )
 
 
+@router.get("/featured", response_model=List[CarRead])
+async def featured_cars(session: AsyncSession = Depends(get_session)):
+    cars = await services.get_featured_cars(session)
+    return cars
+
+
 @router.get("/{car_id}", response_model=CarRead)
 async def get_car(car_id: int, session: AsyncSession = Depends(get_session)):
     return await services.get_car(car_id, session)

@@ -55,6 +55,8 @@ class CarBase(BaseModel):
     city: str
     country: str
     price_per_day: float = Field(..., ge=0, description="Daily rental price")
+    service_fee: float = Field(0, ge=0)
+    tax_percent: float = Field(0, ge=0)
     seats: int = Field(..., ge=1, description="Number of seats")
     transmission: str = Field(
         ...,
@@ -78,6 +80,8 @@ class CarUpdate(BaseModel):
     city: Optional[str] = None
     country: Optional[str] = None
     price_per_day: Optional[float] = Field(None, ge=0)
+    service_fee: Optional[float] = Field(None, ge=0)
+    tax_percent: Optional[float] = Field(None, ge=0)
     seats: Optional[int] = Field(None, ge=1)
     transmission: Optional[str] = None
     fuel_type: Optional[str] = None
