@@ -463,6 +463,10 @@ async def get_stays_by_provider(
     stmt = select(Provider).where(Provider.user_id == user.id)
     result = await session.exec(stmt)
     provider = result.first()
+
+    if provider.status != ProviderStatus.approved:
+        raise HTTPException(status_code=403, detail="Provider not approved")
+
     if not provider:
         raise HTTPException(
             status_code=404,

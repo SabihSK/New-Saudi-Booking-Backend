@@ -1,13 +1,11 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
-from app.features.users.models import UserRole
 
 
 class UserBase(BaseModel):
     email: EmailStr
     full_name: Optional[str] = None
-    role: UserRole = UserRole.customer
 
 
 class UserCreate(UserBase):

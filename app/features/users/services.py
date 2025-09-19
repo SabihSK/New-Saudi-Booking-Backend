@@ -11,10 +11,6 @@ from app.core.security.auth import (
 
 
 async def create_user(user_in: UserCreate, session: AsyncSession) -> User:
-    if user_in.role == UserRole.admin:
-        raise HTTPException(
-            status_code=403, detail="Direct admin registration is not allowed"
-        )
 
     stmt = select(User).where(User.email == user_in.email)
     existing = await session.exec(stmt)
@@ -25,7 +21,7 @@ async def create_user(user_in: UserCreate, session: AsyncSession) -> User:
         email=user_in.email,
         full_name=user_in.full_name,
         hashed_password=get_password_hash(user_in.password),
-        role=user_in.role or UserRole.customer,
+        role=UserRole.customer,
     )
     session.add(db_user)
     await session.commit()

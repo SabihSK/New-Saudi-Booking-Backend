@@ -108,7 +108,7 @@ provider_stays_router = APIRouter(
 @provider_stays_router.get("/", response_model=List[StayRead])
 async def get_my_stays(
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     return await services.get_stays_by_provider(current_user, session)
 
@@ -117,7 +117,7 @@ async def get_my_stays(
 async def create_stay(
     stay_in: StayCreate,
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     return await services.create_stay(stay_in, provider, session)
@@ -128,7 +128,7 @@ async def update_stay(
     stay_id: int,
     stay_in: StayCreate,
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     return await services.update_stay(stay_id, stay_in, provider, session)
@@ -138,7 +138,7 @@ async def update_stay(
 async def delete_stay(
     stay_id: int,
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     await services.delete_stay(stay_id, provider, session)
@@ -150,7 +150,7 @@ async def upload_image(
     stay_id: int,
     file: UploadFile = File(...),
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     return await services.upload_stay_image(stay_id, provider, file, session)
@@ -161,7 +161,7 @@ async def assign_amenities(
     stay_id: int,
     amenity_ids: List[int],
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     return await services.assign_amenities(

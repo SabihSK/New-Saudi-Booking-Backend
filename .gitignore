@@ -12,6 +12,7 @@ __pycache__/
 
 # --- Environment ---
 .env
+*.env
 .venv/
 venv/
 env/
@@ -41,6 +42,7 @@ htmlcov/
 app/upload/users/*
 app/upload/stays/*
 !app/upload/.gitkeep   # keep folder but ignore files
+app/upload/
 
 # --- Build / Dist ---
 dist/

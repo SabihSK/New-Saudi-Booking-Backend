@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from app.features.providers.models import Provider
 from app.features.providers.schemas import ProviderCreate, ProviderUpdate
-from app.features.users.models import User, UserRole
+from app.features.users.models import User
 
 
 async def create_provider(
@@ -11,11 +11,6 @@ async def create_provider(
     provider_in: ProviderCreate,
     session: AsyncSession,
 ) -> Provider:
-    if user.role != UserRole.provider:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User must have provider role to create provider profile",
-        )
 
     stmt = select(Provider).where(Provider.user_id == user.id)
     existing = await session.exec(stmt)
