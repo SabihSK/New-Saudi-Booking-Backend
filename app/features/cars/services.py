@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import uuid
 from fastapi import HTTPException, UploadFile
@@ -177,6 +178,8 @@ async def list_cars(
     transmission: Optional[str] = None,
     fuel_type: Optional[str] = None,
     car_type_id: Optional[int] = None,
+    pickup_datetime: Optional[datetime] = None,
+    dropoff_datetime: Optional[datetime] = None,
 ) -> List[Car]:
     stmt = select(Car).options(
         selectinload(Car.images),

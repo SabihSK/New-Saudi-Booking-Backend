@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
@@ -34,6 +35,8 @@ async def search_cars(
     transmission: Optional[str] = None,
     fuel_type: Optional[str] = None,
     car_type_id: Optional[int] = None,
+    pickup_datetime: Optional[datetime] = None,
+    dropoff_datetime: Optional[datetime] = None,
     session: AsyncSession = Depends(get_session),
 ):
     return await services.list_cars(
@@ -46,6 +49,8 @@ async def search_cars(
         transmission,
         fuel_type,
         car_type_id,
+        pickup_datetime=pickup_datetime,
+        dropoff_datetime=dropoff_datetime,
     )
 
 
@@ -94,7 +99,7 @@ provider_car_router = APIRouter(
 @provider_car_router.get("/", response_model=List[CarRead])
 async def get_my_cars(
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     return await services.list_provider_cars(provider.id, session)
@@ -104,7 +109,7 @@ async def get_my_cars(
 async def create_car(
     car_in: CarCreate,
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     return await services.create_car(car_in, provider.id, session)
@@ -115,7 +120,7 @@ async def update_car(
     car_id: int,
     car_in: CarUpdate,
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     return await services.update_car(car_id, car_in, provider.id, session)
@@ -125,7 +130,7 @@ async def update_car(
 async def delete_car(
     car_id: int,
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     await services.delete_car(car_id, provider.id, session)
@@ -137,7 +142,7 @@ async def upload_car_image(
     car_id: int,
     file: UploadFile = File(...),
     session: AsyncSession = Depends(get_session),
-    current_user: User = Depends(require_role("provider")),
+    current_user: User = Depends(require_role("customer")),
 ):
     provider = await get_provider_by_user(current_user, session)
     return await services.upload_car_image(car_id, provider.id, file, session)
